@@ -1,0 +1,15 @@
+name: Mi Primer Action
+
+# El evento que dispara (trigger) el workflow
+on: [push]
+
+jobs:
+  # Nombre del trabajo
+  saludar_job:
+    # El "Runner" (el sistema operativo de la PC en la nube)
+    runs-on: ubuntu-latest
+
+    # Las instrucciones secuenciales
+    steps:
+      - name: Imprimir saludo en la consola
+        run: echo "¡Hola desde mi primer Action!"
