@@ -31,3 +31,7 @@ jobs:
       # Paso 3: Ejecutar comandos nativos de tu stack
       - name: Instalar dependencias
         run: npm install
+
+      # Fase 3: Integración de Secretos
+      - name: Imprimir secreto de forma segura
+        run: echo "Mi llave es ${{ secrets.API_KEY }}"
