@@ -1,19 +1,9 @@
 name: Mi Primer Action
 
-# El evento que dispara (trigger) el workflow
-on: [push]
+# Configuración de múltiples desencadenadores (triggers)
+on: [push, pull_request]
 
 jobs:
-  # Nombre del trabajo
-  saludar_job:
-    # El "Runner" (el sistema operativo de la PC en la nube)
-    runs-on: ubuntu-latest
-
-    # Las instrucciones secuenciales
-    steps:
-      - name: Imprimir saludo en la consola
-        run: echo "¡Hola desde mi primer Action!"
-
   preparar_entorno_job:
     runs-on: ubuntu-latest
 
@@ -30,6 +20,6 @@ jobs:
       - name: Instalar dependencias
         run: npm install
 
-      # Fase 3: Integración de Secretos
-      - name: Imprimir secreto de forma segura
-        run: echo "Mi llave es ${{ secrets.API_KEY }}"
+      # Fase 4: Validación estática del código base
+      - name: Ejecutar linter estricto
+        run: npm run lint
