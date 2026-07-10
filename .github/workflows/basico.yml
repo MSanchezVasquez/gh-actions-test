@@ -4,6 +4,16 @@ name: Mi Primer Action
 on: [push, pull_request]
 
 jobs:
+  # Nombre del trabajo
+  saludar_job:
+    # El "Runner" (el sistema operativo de la PC en la nube)
+    runs-on: ubuntu-latest
+
+    # Las instrucciones secuenciales
+    steps:
+      - name: Imprimir saludo en la consola
+        run: echo "¡Hola desde mi primer Action!"
+
   preparar_entorno_job:
     runs-on: ubuntu-latest
 
