@@ -17,19 +17,24 @@ jobs:
   preparar_entorno_job:
     runs-on: ubuntu-latest
 
+    # Fase 6: Estrategia de Matriz
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
     steps:
       - name: Clonar el repositorio
         uses: actions/checkout@v4
 
-      - name: Configurar Node.js
+      # Interpolar la variable de la matriz en el nombre y en la configuración
+      - name: Configurar Node.js ${{matrix.node-version}}
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: ${{matrix.node-version}}
           cache: "npm"
 
       - name: Instalar dependencias
         run: npm install
 
-      # Fase 4: Validación estática del código base
-      - name: Ejecutar linter estricto
+      - name: Ejecutar Quality Gate (Linter)
         run: npm run lint
