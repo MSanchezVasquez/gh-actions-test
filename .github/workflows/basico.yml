@@ -1,40 +1,46 @@
 name: Mi Primer Action
 
-# Configuración de múltiples desencadenadores (triggers)
 on: [push, pull_request]
 
 jobs:
-  # Nombre del trabajo
-  saludar_job:
-    # El "Runner" (el sistema operativo de la PC en la nube)
+  # Job 1: Responsable exclusivamente de preparar e integrar el código
+  build_job:
     runs-on: ubuntu-latest
-
-    # Las instrucciones secuenciales
-    steps:
-      - name: Imprimir saludo en la consola
-        run: echo "¡Hola desde mi primer Action!"
-
-  preparar_entorno_job:
-    runs-on: ubuntu-latest
-
-    # Fase 6: Estrategia de Matriz
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
-
     steps:
       - name: Clonar el repositorio
         uses: actions/checkout@v4
 
-      # Interpolar la variable de la matriz en el nombre y en la configuración
-      - name: Configurar Node.js ${{matrix.node-version}}
+      - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{matrix.node-version}}
+          node-version: "20"
           cache: "npm"
 
       - name: Instalar dependencias
         run: npm install
 
-      - name: Ejecutar Quality Gate (Linter)
-        run: npm run lint
+      - name: Compilar el proyecto
+        run: npm run build
+
+      # Se empaqueta la carpeta generada y se sube a la bóveda de GitHub
+      - name: Subir artefacto de compilación
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-folder
+          path: dist/ # Ruta de la carpeta que queremos guardar
+
+  # Job 2: Responsable exclusivamente del uso del código compilado
+  deploy_job:
+    needs: build_job # Fuerza a que este Job espere a que build_job termine con éxito
+    runs-on: ubuntu-latest
+    steps:
+      # No necesitamos hacer checkout ni instalar Node.js aquí,
+      # solo descargamos el código ya procesado.
+      - name: Descargar artefacto
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-folder
+          path: dist/ # Dónde queremos colocar la carpeta descargada
+
+      - name: Verificar archivos descargados
+        run: ls -la dist/

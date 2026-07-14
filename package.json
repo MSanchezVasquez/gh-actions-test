@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "echo \"¡Análisis estático completado: 0 errores!\" && exit 0"
+    "lint": "echo \"¡Análisis estático completado: 0 errores!\" && exit 0",
+    "build": "mkdir -p dist && echo '<h1>Build Exitoso</h1>' > dist/index.html"
   },
   "repository": {
     "type": "git",
