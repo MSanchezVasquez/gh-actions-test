@@ -1,0 +1,27 @@
+name: Setup Node Reusable
+
+# Expone este flujo para ser invocado por otros workflows
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: 'La versión de Node.js a utilizar'
+        required: false
+        type: string
+        default: '20'
+
+jobs:
+  preparar_y_validar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js ${{ inputs.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: 'npm'
+
+      - name: Instalar dependencias
+        run: npm install
